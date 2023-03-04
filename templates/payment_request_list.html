@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Request List</title>
+</head>
+<body>
+<h1>Payment Request List</h1>
+<table>
+    <tr>
+        <th>Sender</th>
+        <th>Recipient</th>
+        <th>Amount</th>
+        <th>Currency</th>
+        <th>Timestamp</th>
+        <th>Actions</th>
+    </tr>
+    {% for request in payment_requests %}
+        <tr>
+            <td>{{ request.sender.user.username }}</td>
+            <td>{{ request.recipient.user.username }}</td>
+            <td>{{ request.amount }}</td>
+            <td>{{ request.get_currency_display }}</td>
+            <td>{{ request.timestamp }}</td>
+            <td>
+                <a href="{% url 'register:accept_payment_request' request.id %}">Accept</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
