@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.urls import include, path
 
+
+app_name = 'webapps2023'
 urlpatterns = [
     path('', include('register.urls')),
 ]
