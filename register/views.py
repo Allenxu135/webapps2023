@@ -8,6 +8,10 @@ from django.contrib import messages
 from django.db.models import Q
 from decimal import Decimal
 from .models import UserProfile, PaymentRequest, Payment
+from django.shortcuts import render
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import render, redirect
 
 
 class HomePageView(TemplateView):
@@ -18,9 +22,7 @@ class HomePageView(TemplateView):
 
 
 class SignUpView(CreateView):
-    """
-    Sign up view that allows new users to register.
-    """
+    # Sign up view that allows new users to register.
     form_class = UserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'webapps2023/signup.html'
@@ -88,6 +90,7 @@ def accept_payment_request(request, request_id):
     else:
         return render(request, 'webapps2023/payment_request_accept.html', {'payment_request': payment_request})
 
+
 @method_decorator(login_required, name='dispatch')
 class PaymentListView(TemplateView):
     """
@@ -104,4 +107,42 @@ class PaymentListView(TemplateView):
         return context
 
 
+@login_required
+def my_view(request):
+    # Do something here
+    return render(request, 'webapps2023/my_template.html', {'data': 'some data'})
+
+
+def signup(request):
+    form = UserCreationForm()
+    return render(request, 'webapps2023/signup.html', {'form': form})
+
+
+def login_view(request):
+    # Check if the request method is POST
+    if request.method == 'POST':
+        # Create a form instance with the POST data
+        form = AuthenticationForm(data=request.POST)
+        # Check if the form is valid
+        if form.is_valid():
+            # Get the username and password from the cleaned data
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            # Authenticate the user
+            user = authenticate(username=username, password=password)
+            # Check if the user exists
+            if user is not None:
+                # Login the user
+                login(request, user)
+                # Redirect to the home page
+                return redirect('home')
+            else:
+                # If the user does not exist, return to the home page and show a message
+                messages.error(request, 'User does not exist, please sign up first.')
+                return redirect('home')
+    else:
+        # If the request method is not POST, create an empty form
+        form = AuthenticationForm()
+    # Render the login template with the form
+    return render(request, 'webapps2023/login.html', {'form': form})
 
