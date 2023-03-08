@@ -76,8 +76,13 @@ WSGI_APPLICATION = 'webapps2023.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.webapp',
+        'ENGINE': 'django.db.backends.mysql',
+        #'NAME': BASE_DIR / 'db.webapp',
+        'NAME': 'db.webapp',
+        'USER': 'root',
+        'PASSWORD': 'Allenxu135',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
