@@ -21,14 +21,11 @@
     <!-- Submit button -->
     <button type="submit">Login</button>
 </form>
-<!-- check the account exist-->
-{% if form.errors %}
-    <p style="color: red;">Sorry, the account does not exist, please return to signup</p>
+{% if messages %}
+    {% for message in messages %}
+        <p style="color: red;">{{ message }}</p>
+    {% endfor %}
 {% endif %}
-<p>
-    <!-- Return to home-->
-    <a href="{% url 'home' %}">Back</a>
-</p>
-</form>
+<a href="{% url 'home' %}">Back</a>
 </body>
 </html>
