@@ -21,5 +21,14 @@
     <!-- Submit button -->
     <button type="submit">Login</button>
 </form>
+<!-- check the account exist-->
+{% if form.errors %}
+    <p style="color: red;">Sorry, the account does not exist, please return to signup</p>
+{% endif %}
+<p>
+    <!-- Return to home-->
+    <a href="{% url 'home' %}">Back</a>
+</p>
+</form>
 </body>
 </html>

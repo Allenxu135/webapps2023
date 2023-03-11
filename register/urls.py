@@ -7,7 +7,7 @@ app_name = 'register'
 
 urlpatterns = [
     path('', HomePageView.as_view(), name='webapps2023/home.html'),
-    path('sign up/', SignUpView.as_view(),name ='webapps2023/signup.html'),
+    path('sign up/', SignUpView.as_view(), name='webapps2023/signup.html'),
     path('profile/', UserProfileView.as_view(), name='webapps2023/profile.html'),
     path('payment_request/', PaymentRequestView.as_view(), name='webapps2023/payment_request'),
     path('payment_request_list/', PaymentRequestListView.as_view(), name='webapps2023/payment_request_list.html'),
