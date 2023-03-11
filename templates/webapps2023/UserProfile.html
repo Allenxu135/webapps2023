@@ -5,10 +5,18 @@
     <title>User Profile</title>
 </head>
 <body>
-    <h1>User Profile</h1>
-    <p>Username: {{ user.username }}</p>
-    <p>Selected Currency: {{ user_profile.selected_currency }}</p>
-    <p>Balance: {{ user_profile.balance }}</p>
-
+<h1>Welcome {{ user.username }}!</h1>
+<h2>Your Profile Information</h2>
+<p>Username: {{ user.username }}</p>
+<p>Email: {{ user.email }}</p>
+<h2>Make a Payment</h2>
+<form method="post">
+    {% csrf_token %}
+    <p>
+        <label for="amount">Amount:</label>
+        <input type="text" name="amount" id="amount">
+    </p>
+    <button type="submit">Make Payment</button>
+</form>
 </body>
 </html>

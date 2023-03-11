@@ -135,7 +135,7 @@ def login_view(request):
                 # Login the user
                 login(request, user)
                 # Redirect to the home page
-                return redirect('home')
+                return render(request, 'webapps2023/UserProfile.html')
             else:
                 # If the user does not exist, return to the home page and show a message
                 messages.error(request, 'User does not exist, please sign up first.')
