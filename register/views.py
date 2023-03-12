@@ -80,13 +80,23 @@ def accept_payment_request(request, request_id):
     """
     payment_request = get_object_or_404(PaymentRequest, id=request_id)
     if request.method == 'POST':
-        # Create a new payment object
-        Payment.objects.create(sender=payment_request.sender, recipient=payment_request.recipient,
-                               amount=payment_request.amount, currency=payment_request.currency)
-        # Delete the payment request object
-        payment_request.delete()
-        messages.success(request, 'Payment request accepted successfully.')
-        return redirect('payment_request_list')
+        # Get the recipient's profile
+        recipient_profile = UserProfile.objects.get(user=request.user)
+        # Check if the recipient has enough balance
+        if recipient_profile.balance >= payment_request.amount:
+            # Deduct the payment amount from the recipient's balance
+            recipient_profile.balance -= payment_request.amount
+            recipient_profile.save()
+            # Create a new payment object
+            Payment.objects.create(sender=payment_request.sender, recipient=payment_request.recipient,
+                                   amount=payment_request.amount, currency=payment_request.currency)
+            # Delete the payment request object
+            payment_request.delete()
+            messages.success(request, 'Payment request accepted successfully.')
+            return redirect('payment_request_list')
+        else:
+            messages.error(request, 'Insufficient balance.')
+            return redirect('payment_request_list')
     else:
         return render(request, 'webapps2023/payment_request_accept.html', {'payment_request': payment_request})
 

@@ -13,6 +13,10 @@ class UserProfile(models.Model):
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
 
+class PaymentRequest:
+    pass
+
+
 class Payment(models.Model):
     # This model represents a payment made from one user to another
     sender = models.ForeignKey(UserProfile, related_name='sent_payments', on_delete=models.CASCADE)
@@ -26,6 +30,7 @@ class Payment(models.Model):
     currency = models.CharField(max_length=3, choices=currency_choices)
     is_pending = models.BooleanField(default=True) # True if the payment has not yet been completed
     timestamp = models.DateTimeField(auto_now_add=True)
+    payment_request = models.OneToOneField(PaymentRequest, on_delete=models.CASCADE, null=True, blank=True)
 
 
 class PaymentRequest(models.Model):
@@ -39,6 +44,6 @@ class PaymentRequest(models.Model):
         ('EUR', 'Euro'),
     )
     currency = models.CharField(max_length=3, choices=currency_choices)
-    # True if the request has not yet been completed
-    is_pending = models.BooleanField(default=True)
+    is_pending = models.BooleanField(default=True) # True if the request has not yet been completed
     timestamp = models.DateTimeField(auto_now_add=True)
+    is_accepted = models.BooleanField(default=False)
