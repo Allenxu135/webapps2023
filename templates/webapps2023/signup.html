@@ -6,8 +6,19 @@
 </head>
 <body>
 <h2>Sign Up</h2>
-<form method="post">
-    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% if validateError %}
+    {{validateForm}}
+    <a href="/signup">Back</a>
+{% else %}
+<form method="post" action="/signup/ ">
+    {% csrf_token %}
     <p>
         <label for="username">Username:</label>
         <input type="text" id="username" name="username">
@@ -21,7 +32,8 @@
         <input type="password" id="password2" name="password2">
     </p>
     <button type="submit">Sign Up</button>
+    <a href="{% url 'register:webapps2023/home.html' %}">Back</a>
 </form>
-
+{% endif %}
 </body>
 </html>

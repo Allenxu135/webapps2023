@@ -12,8 +12,8 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
-
-
+from django.contrib.auth.models import User
+from django.http import HttpResponse
 class HomePageView(TemplateView):
     """
     Home page view that displays a welcome message.
@@ -26,7 +26,17 @@ class SignUpView(CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'webapps2023/signup.html'
-
+    def post(self, request):
+        form = UserCreationForm(request.POST)
+        print(form)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            messages.success(request, 'Resgister sucessful！')
+        return render(request, 'webapps2023/signup.html', {'validateError': True, 'validateForm': form})
 
 @method_decorator(login_required, name='dispatch')
 class UserProfileView(TemplateView):
@@ -123,36 +133,42 @@ def my_view(request):
     return render(request, 'webapps2023/my_template.html', {'data': 'some data'})
 
 
-def signup(request):
-    form = UserCreationForm()
-    return render(request, 'webapps2023/signup.html', {'form': form})
-
+# def signup(request):
+#     if request.method == 'POST':
+#         form = UserCreationForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             username = form.cleaned_data.get('username')
+#             raw_password = form.cleaned_data.get('password1')
+#             user = authenticate(username=username, password=raw_password)
+#             login(request, user)
+#             messages.success(request, 'Resgister sucessful！')
+#             return redirect('register:webapps2023/home.html')
+#     else:
+#         form = UserCreationForm()
+#     return render(request, 'webapps2023/signup.html', {'form': form})
 
 def login_view(request):
-    # Check if the request method is POST
     if request.method == 'POST':
-        # Create a form instance with the POST data
         form = AuthenticationForm(data=request.POST)
-        # Check if the form is valid
         if form.is_valid():
-            # Get the username and password from the cleaned data
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            # Authenticate the user
-            user = authenticate(username=username, password=password)
-            # Check if the user exists
-            if user is not None:
-                # Login the user
+            try:
+                user = User.objects.get(username=username)
+            except User.DoesNotExist:
+                messages.error(request, 'Invalid username or password')
+                return render(request, 'webapps2023/login.html', {'form': form})
+            if user is not None and user.check_password(password):
                 login(request, user)
-                # Redirect to the home page
                 return render(request, 'webapps2023/UserProfile.html')
             else:
-                # If the user does not exist, return to the home page and show a message
-                messages.error(request, 'User does not exist, please sign up first.')
-                return redirect('home')
+                messages.error(request, 'Invalid username or password')
+        else:
+            messages.error(request, 'Invalid form')
     else:
-        # If the request method is not POST, create an empty form
         form = AuthenticationForm()
-    # Render the login template with the form
     return render(request, 'webapps2023/login.html', {'form': form})
+
+
 

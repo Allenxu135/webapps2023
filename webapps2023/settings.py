@@ -69,6 +69,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'webapps2023.wsgi.application'
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 
 # Database
