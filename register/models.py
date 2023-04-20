@@ -9,8 +9,8 @@ class UserProfile(models.Model):
         ('USD', 'US Dollar'),
         ('EUR', 'Euro'),
     )
-    selected_currency = models.CharField(max_length=3, choices=currency_choices)
-    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    selected_currency = models.CharField(max_length=3)
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=1000)
 
 
 class PaymentRequest(models.Model):
@@ -45,6 +45,7 @@ class Payment(models.Model):
     is_pending = models.BooleanField(default=True) # True if the payment has not yet been completed
     timestamp = models.DateTimeField(auto_now_add=True)
     payment_request = models.OneToOneField(PaymentRequest, on_delete=models.CASCADE, null=True, blank=True)
+
 
 
 

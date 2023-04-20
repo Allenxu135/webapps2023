@@ -20,12 +20,19 @@
     </p>
     <!-- Submit button -->
     <button type="submit">Login</button>
+    <button onclick="location.href='{% url 'register:webapps2023/home.html' %}'">Back</button>
 </form>
+
 {% if messages %}
     {% for message in messages %}
         <p style="color: red;">{{ message }}</p>
     {% endfor %}
 {% endif %}
-<a href="{% url 'register:webapps2023/home.html' %}">Back</a>
+
+{% comment %} <script>
+    {% if user.is_authenticated %}
+    <a href="{% url 'register:webapps2023/UserProfile.html' %}">User Profile</a>
+    {% endif %}
+</script> {% endcomment %}
 </body>
 </html>

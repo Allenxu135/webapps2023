@@ -1,5 +1,6 @@
-# Register your models here.
 from django.contrib import admin
+from django.urls import reverse
+from django.utils.html import format_html
 from .models import UserProfile, Payment, PaymentRequest
 
 
@@ -20,6 +21,13 @@ class PaymentAdmin(admin.ModelAdmin):
     # Search fields for the admin site
     search_fields = ('sender__user__username', 'recipient__user__username')
 
+    def get_changeform_link(self, obj):
+        changeform_url = reverse('admin:register_payment_change', args=[obj.pk])
+        return format_html('<a href="{}">View</a>', changeform_url)
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.is_superuser
+
 
 # Custom admin class for PaymentRequest
 class PaymentRequestAdmin(admin.ModelAdmin):
@@ -29,6 +37,13 @@ class PaymentRequestAdmin(admin.ModelAdmin):
     list_filter = ('currency', 'is_pending')
     # Search fields for the admin site
     search_fields = ('sender__user__username', 'recipient__user__username')
+
+    def get_changeform_link(self, obj):
+        changeform_url = reverse('admin:register_paymentrequest_change', args=[obj.pk])
+        return format_html('<a href="{}">View</a>', changeform_url)
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.is_superuser
 
 
 # Register the models and their custom admin classes to the admin site

@@ -1,10 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Sign up</title>
-</head>
-<body>
 <h2>Sign Up</h2>
 {% if messages %}
     <ul class="messages">
@@ -12,28 +5,42 @@
             <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
         {% endfor %}
     </ul>
-{% endif %}
-{% if validateError %}
+{% elif validateError %}
     {{validateForm}}
-    <a href="/signup">Back</a>
+    <a href="/signup/">Back</a>
 {% else %}
-<form method="post" action="/signup/ ">
-    {% csrf_token %}
-    <p>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username">
-    </p>
-    <p>
-        <label for="password1">Password:</label>
-        <input type="password" id="password1" name="password1">
-    </p>
-    <p>
-        <label for="password2">Confirm Password:</label>
-        <input type="password" id="password2" name="password2">
-    </p>
-    <button type="submit">Sign Up</button>
-    <a href="{% url 'register:webapps2023/home.html' %}">Back</a>
-</form>
+    <form method="post" action="/signup/">
+        {% csrf_token %}
+        <p>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username">
+        </p>
+        <p>
+            <label for="password2">Email:</label>
+            <input type="text" id="email" name="email">
+        </p>
+        <p>
+            <label for="currency_choices" >currency_choices:</label>
+            <select id="currency_choices" name="currency_choices">
+                <option>GBP</option>
+                <option>USD</option>
+                <option>EUR</option>
+            </select>
+        </p>
+        <p>
+            <label for="password1">Password:</label>
+            <input type="password" id="password1" name="password1">
+        </p>
+        <p>
+            <label for="password2">Confirm Password:</label>
+            <input type="password" id="password2" name="password2">
+        </p>
+       
+        <button type="submit">Sign Up</button>
+        <a href="{% url 'register:webapps2023/home.html' %}">Back</a>
+    </form>
 {% endif %}
-</body>
-</html>
+
+{% if messages %}
+    <p>Please click <a href="{% url 'register:webapps2023/home.html' %}">back</a></p>
+{% endif %}

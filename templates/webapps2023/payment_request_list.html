@@ -5,8 +5,23 @@
     <title>Payment Request List</title>
 </head>
 <body>
+<style>
+    th,td{
+        border:1px solid #dedede;
+        padding:5px;
+    }
+    td{
+
+    }
+</style>
 <h1>Payment Request List</h1>
+<a href="/UserProfile/">back</a>
+{% if payment_requests %}
+<p>
+    {{tips}}
+</p>
 <table>
+    <thead>
     <tr>
         <th>Sender</th>
         <th>Recipient</th>
@@ -15,6 +30,8 @@
         <th>Timestamp</th>
         <th>Actions</th>
     </tr>
+    </thead>
+    <tbody>
     {% for request in payment_requests %}
         <tr>
             <td>{{ request.sender.user.username }}</td>
@@ -22,11 +39,26 @@
             <td>{{ request.amount }}</td>
             <td>{{ request.get_currency_display }}</td>
             <td>{{ request.timestamp }}</td>
-            <td>
-                <a href="{% url 'register:accept_payment_request' request.id %}">Accept</a>
+            <td style="width:200px">
+                <form method="post" action="/accept_payment_request/">
+                    {% csrf_token %}
+                    <input type="hidden" value={{request.id}} name="request_id">
+                    <input type='hidden' value='1' name="request_type"/>
+                    <button type="submit">Accept</button>
+                </form>
+                <form method="post" action="/accept_payment_request/">
+                    {% csrf_token %}
+                    <input type="hidden" value={{request.id}} name="request_id">
+                    <input type='hidden' value='0' name="request_type"/>
+                    <button type="submit">Refuse</button>
+                </form>
             </td>
         </tr>
     {% endfor %}
+    </tbody>
 </table>
+{% else %}
+<p> <p>No payment requests available.</p></p>
+{% endif %}
 </body>
 </html>

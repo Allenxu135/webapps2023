@@ -5,18 +5,75 @@
     <title>User Profile</title>
 </head>
 <body>
-<h1>Welcome {{ user.username }}!</h1>
+<h1>Welcome {{ username }}!</h1>
 <h2>Your Profile Information</h2>
-<p>Username: {{ user.username }}</p>
-<p>Email: {{ user.email }}</p>
+<p>Username: {{ username }}</p>
+<h2>Balance: {{ currency }} {{ balance }}</h2>
 <h2>Make a Payment</h2>
-<form method="post">
+<a href="/payment_request_list">payment_request_list</a>
+<form method="post" action="">
     {% csrf_token %}
+    <p>
+        <label for="other">Transfter to(Please enter the username):</label>
+        <input type="text" name="other" id="other">
+        {{ userTips }}
+    </p>
     <p>
         <label for="amount">Amount:</label>
         <input type="text" name="amount" id="amount">
+        {{ balanceTips }}
     </p>
-    <button type="submit">Make Payment</button>
+    <p>
+        <label for="currency">Currency:</label>
+        <select name="currency" id="currency">
+            <option value="GBP">GBP</option>
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+        </select>
+    </p>
+    <button type="submit">Start Payment</button>
+</form>
+
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{%endif%}
+<h2>Transaction History</h2>
+{% if transactions %}
+    <table>
+        <thead>
+        <tr>
+            <th>Transaction Type</th>
+            <th>Amount</th>
+            <th>Currency</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for transaction in transactions %}
+            <tr>
+                {% if transaction.sender.user == username%}
+                <td>Transfer out</td>
+                {% else %}
+                <td>Entry</td>
+                {% endif %}
+                <td>{{ transaction.amount }}</td>
+                <td>{{ transaction.currency }}</td>
+                <td>{{ transaction.timestamp }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No transaction history available.</p>
+{% endif %}
+
+<form action="/logout" method="post">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
 </form>
 </body>
 </html>

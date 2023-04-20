@@ -87,22 +87,26 @@ DATABASES = {
     }
 }
 
-
+AUTH_PROFILE_MODULE = 'webapp2023.UserProfile'
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+{
+    # check the similiarity of user
+    'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
+{
+     #check the password length
+    'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+},
+{
+    # check the password is daily password
+    'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+},
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    # check the password is all number
+    'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
@@ -118,6 +122,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+LOGIN_REDIRECT_URL = '/UserProfile/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -130,4 +135,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ROOT_URLCONF = 'webapps2023.urls'
 
+X_FRAME_OPTIONS = 'DENY'
 
