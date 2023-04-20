@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Request</title>
+</head>
+<body>
+    <h1>Payment Request</h1>
+    <form method="post">
+    {% csrf_token %}
+    <label for="recipient_username">Recipient User Name:</label>
+    <input type="text" id="recipient_username" name="recipient_username" value={{other_name}}>
+    <br>
+    <label for="amount">Amount:</label>
+    <input type="text" id="amount" name="amount" value={{other_amount}}>
+    <br>
+    <label for="currency">Currency:</label>
+    <select id="currency" name="currency">
+        <option value="GBP">GBP</option>
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+    </select>
+    <br>
+    <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
